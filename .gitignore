@@ -1,0 +1,6 @@
+.ruby-version
+.rbenv-version
+.rbenv-gemsets
+.bundle
+tmp/
+log/
