@@ -28,12 +28,10 @@ module Compiler
 
   def run!
     files = Dir[BUILD_PATH+'/*.js'].reject{|f| f =~ /\.min\.js\Z/}
-    puts files
     files.each do |file|
       input_file  = "--js #{file}"
       output_file = " --js_output_file #{file.sub(/\.js\Z/,'.min.js')}"
       cmd = ["java", "-jar vendor/compiler.jar", input_file, output_file].join(' ')
-      puts "COMPILE:\n -> #{cmd}"
       system cmd
     end
   end
@@ -44,11 +42,13 @@ namespace :merge do
 
   desc "Merge files for standalone Javascript usage"
   task :js do
+    puts "-- Merging for standalone usage ..."
     Merger.run! JS_PACKAGE
   end
 
   desc "Merge files for jQuery plugin usage"
   task :jquery do
+    puts "-- Merging for jQuery plugin usage ..."
     Merger.run! JQ_PACKAGE
   end
 
@@ -59,11 +59,13 @@ end
 
 desc "Compile/minify merged files"
 task :compile do
+  puts "-- Compiling ..."
   Compiler.run!
 end
 
 desc "Clean up files"
 task :clean do
+  puts "-- Cleaning ..."
   files = Dir[BUILD_PATH+'/*.js'].join(" ")
   system "rm #{files}" unless files.empty?
 end
@@ -77,9 +79,13 @@ namespace :build do
   task :jquery => ["merge:jquery", :compile]
 
   desc "Build all and everything (merge and compile)"
-  task :all => [:clean, "build:js","build:jquery"]
+  task :all => [:clean, "merge:all", :compile] do
+    puts "Finished."
+  end
 
 end
 
 desc "Build all and everything (merge and compile)"
-task :build => ["build:js","build:jquery"]
+task :build => "build:all"
+
+task :default => :build
