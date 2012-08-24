@@ -1,7 +1,3 @@
-/*
- * Storage extensions
- *
- */
 (function(){
 
   Storage.prototype.keys = function(){
