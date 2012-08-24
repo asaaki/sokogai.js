@@ -49,7 +49,6 @@ module Compressor
     files = Dir[BUILD_PATH+'/*.js']
     files.each do |file|
       cmd = ["gzip -f -c -9",file,"> #{file}.gz"].join(' ')
-      puts cmd
       system cmd
     end
   end
@@ -96,13 +95,13 @@ end
 namespace :build do
 
   desc "Build for standalone Javascript usage"
-  task :js => ["merge:js", :compile]
+  task :js => ["merge:js", :compile, :compress]
 
   desc "Build for jQuery plugin usage"
-  task :jquery => ["merge:jquery", :compile]
+  task :jquery => ["merge:jquery", :compile, :compress]
 
   desc "Build all and everything (merge and compile)"
-  task :all => [:clean, "merge:all", :compile] do
+  task :all => [:clean, "merge:all", :compile, :compress] do
     puts "Finished."
   end
 
