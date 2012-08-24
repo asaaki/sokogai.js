@@ -2,7 +2,7 @@
 
 SRC_PATH    = File.realpath(File.join(File.dirname(__FILE__),'src'))
 BUILD_PATH  = File.realpath(File.join(File.dirname(__FILE__),'.'))
-GEN_PACKAGE = %w[ storage mstorage ]
+GEN_PACKAGE = %w[ _license storage mstorage ]
 
 JS_PACKAGE  = { :name => "sokogai",        :files => %w[ sokogai ] }
 JQ_PACKAGE  = { :name => "jquery.sokogai", :files => %w[ sokogai jquery.sokogai ] }
@@ -31,11 +31,28 @@ module Compiler
     files.each do |file|
       input_file  = "--js #{file}"
       output_file = " --js_output_file #{file.sub(/\.js\Z/,'.min.js')}"
+      ###
+      # --compilation_level WHITESPACE_ONLY
+      # --language_in ECMASCRIPT5
+      # --generate_exports
       cmd = ["java", "-jar vendor/compiler.jar", input_file, output_file].join(' ')
       system cmd
     end
   end
 
+end
+
+module Compressor
+  extend self
+
+  def run!
+    files = Dir[BUILD_PATH+'/*.js']
+    files.each do |file|
+      cmd = ["gzip -f -c -9",file,"> #{file}.gz"].join(' ')
+      puts cmd
+      system cmd
+    end
+  end
 end
 
 namespace :merge do
@@ -61,6 +78,12 @@ desc "Compile/minify merged files"
 task :compile do
   puts "-- Compiling ..."
   Compiler.run!
+end
+
+desc "Compress JS files (.gz)"
+task :compress do
+  puts "-- Compressing ..."
+  Compressor.run!
 end
 
 desc "Clean up files"
