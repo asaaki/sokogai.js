@@ -1,4 +1,4 @@
-sokogai = function(){
+function Sokogai(){
   var ls = window.localStorage || null
     , ss = window.sessionStorage || null
     , ms = window.memoryStorage || null
@@ -11,3 +11,4 @@ sokogai = function(){
     }
   }
 }
+window.sokogai = new Sokogai()

@@ -2,6 +2,7 @@
  * @license MIT/X11
  * (c) 2012 Christoph Grabo <chris@dinarrr.com>
  */
+
 ;
 (function(){
 
@@ -13,7 +14,8 @@
     return klist
   }
 
-})();
+})()
+;
 function mStorage(){
   this.length = 0
 }
@@ -83,7 +85,7 @@ function mStorage(){
   window.memoryStorage = new mStorage()
 })()
 ;
-sokogai = function(){
+function Sokogai(){
   var ls = window.localStorage || null
     , ss = window.sessionStorage || null
     , ms = window.memoryStorage || null
@@ -96,15 +98,10 @@ sokogai = function(){
     }
   }
 }
+window.sokogai = new Sokogai()
 ;
 // jQuery wrapper for sokogai.js
-// $.sokogai[funcs]
-
 (function($) {
-  $.fn.sokogai = function(){
-
-    return (new sokogai)
-
-  }
+  $.sokogai = window.sokogai
 })(jQuery)
 ;
