@@ -32,9 +32,7 @@ module Compiler
       input_file  = "--js #{file}"
       output_file = " --js_output_file #{file.sub(/\.js\Z/,'.min.js')}"
       ###
-      # --compilation_level WHITESPACE_ONLY
-      # --language_in ECMASCRIPT5
-      # --generate_exports
+      # --compilation_level WHITESPACE_ONLY | SIMPLE_OPTIMIZATIONS | ADVANCED_OPTIMIZATIONS
       cmd = ["java", "-jar vendor/compiler.jar", input_file, output_file].join(' ')
       system cmd
     end
